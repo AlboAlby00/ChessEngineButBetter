@@ -6,9 +6,10 @@ import java.io.File;
 
 public class UserInterface extends JPanel {
 
-    //WP,WR,WN,WB,WK,WQ,BP,BR,BN,BB,BK,BQ
+    //WP,WR,WN,WB,WQ,WN,BP,BR,BN,BB,BQ,BN
     static long WP=0L,WR=0L,WN=0L,WB=0L,WK=0L,WQ=0L,BP=0L,BR=0L,BN=0L,BB=0L,BK=0L,BQ=0L;
     static int humanIsWhite=0;
+    static boolean UniversalCastleWK=true,UniversalCastleWQ=true,UniversalCastleBK=true,UniversalCastleBQ=true;
 
     static int squareSize = 64;
     static int exitBarHeight = 35;
@@ -113,7 +114,7 @@ public class UserInterface extends JPanel {
 
     public static void newGame(){
         BoardGeneration.initializeStandardChess();
-        Moves.possibleMovesW("",WP,WR,WN,WB,WK,WQ,BP,BR,BN,BB,BK,BQ);
+        Moves.possibleMovesB("",WP,WR,WN,WB,WQ,WK,BP,BR,BN,BB,BK,BQ,UniversalCastleBQ,UniversalCastleBK);
     }
 
 }
