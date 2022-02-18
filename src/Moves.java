@@ -586,6 +586,50 @@ public class Moves {
         return list;
     }
 
+    static public long makeMove(long board, String move, char type){
+        if(Character.isDigit(move.charAt(3))){
+            int start = Character.getNumericValue(move.charAt(0))*8+Character.getNumericValue(move.charAt(1));
+            int end = Character.getNumericValue(move.charAt(2))*8+Character.getNumericValue(move.charAt(3));
+            if(((board>>>start)&1)==1) {
+                board&=~(1L<<start);
+                board|=(1L<<end);
+            } else board&=~(1L<<end);
+        } else if(move.charAt(3)=='P'){
+            int start,end;
+            if(Character.isUpperCase(move.charAt(2))){
+                start=8+Character.getNumericValue(move.charAt(0));
+                end=Character.getNumericValue(move.charAt(1));
+            }
+            else{
+                start=48+Character.getNumericValue(move.charAt(0));
+                end=56+Character.getNumericValue(move.charAt(1));
+            }
+            if(type==move.charAt(2)){
+                board&=~(1L<<start);
+                board|=1L<<end;
+            }
+            else board&=~(1L<<end);
+        } else if(move.charAt(3)=='E'){
+            int start,end,k;
+            if(Character.isUpperCase(move.charAt(2))){
+                start=24+Character.getNumericValue(move.charAt(0));
+                end=16+Character.getNumericValue(move.charAt(1));
+                k=+8;
+            } else{
+                start=32+Character.getNumericValue(move.charAt(0));
+                end=40+Character.getNumericValue(move.charAt(1));
+                k=-8;
+            }
+            if(((board>>>start)&1)==1){
+                board&=~(1L<<start);
+                board|=1L<<end;
+            }
+            else board &= ~(1L<<(end+k));
+
+
+        } else System.out.println("Error! move format is wrong!");
+        return board;
+    }
 
     static public void checkTime(){
         long PAWN_MOVES,WP=RANK_4,possibility;
