@@ -121,12 +121,107 @@ public class BoardGeneration {
         UserInterface.BB=BB;
         UserInterface.BQ=BQ;
         UserInterface.BK=BK;
-
     }
 
     private static long convertStringToBitboard(String string){
         if(string.charAt(0)=='0') return Long.parseLong(string,2);
         else return Long.parseLong("1"+string.substring(2),2)*2;
+    }
+
+    public static void importFen(String fenString){
+
+        int i=0,j=0;
+        String[][] board= new String[8][8] ;
+        for(int k=0; k<64; k++){
+            board[k/8][k%8]="";
+        }
+
+        while(fenString.charAt(i)!=' '){
+            switch (fenString.charAt(i++)){
+                case 'P':
+                   board[j/8][j%8]="P";
+                   j++;
+                   break;
+                case 'R':
+                    board[j/8][j%8]="R";
+                    j++;
+                    break;
+                case 'N':
+                    board[j/8][j%8]="N";
+                    j++;
+                    break;
+                case 'B':
+                    board[j/8][j%8]="B";
+                    j++;
+                    break;
+                case 'Q':
+                    board[j/8][j%8]="Q";
+                    j++;
+                    break;
+                case 'K':
+                    board[j/8][j%8]="K";
+                    j++;
+                    break;
+                case 'p':
+                    board[j/8][j%8]="p";
+                    j++;
+                    break;
+                case 'r':
+                    board[j/8][j%8]="r";
+                    j++;
+                    break;
+                case 'n':
+                    board[j/8][j%8]="n";
+                    j++;
+                    break;
+                case 'b':
+                    board[j/8][j%8]="b";
+                    j++;
+                    break;
+                case 'q':
+                    board[j/8][j%8]="q";
+                    j++;
+                    break;
+                case 'k':
+                    board[j/8][j%8]="k";
+                    j++;
+                    break;
+                case '1': j+=1; break;
+                case '2': j+=2; break;
+                case '3': j+=3; break;
+                case '4': j+=4; break;
+                case '5': j+=5; break;
+                case '6': j+=6; break;
+                case '7': j+=7; break;
+                case '8': j+=8; break;
+                default: break;
+            }
+        }
+        arrayToBitboards(board,0L,0L,0L,0L,0L,0L,0L,0L,0L,0L,0L,0L);
+
+        i++;
+        UserInterface.currentPlayer = fenString.charAt(i)=='b' ? 0 : 1;
+        i+=2;
+
+        UserInterface.UniversalCastleWQ=false;
+        UserInterface.UniversalCastleWK=false;
+        UserInterface.UniversalCastleBQ=false;
+        UserInterface.UniversalCastleBK=false;
+        while(fenString.charAt(i)!=' '){
+            switch (fenString.charAt(i)){
+                case '-': break;
+                case 'Q': UserInterface.UniversalCastleWQ=true; break;
+                case 'K': UserInterface.UniversalCastleWK=true; break;
+                case 'q': UserInterface.UniversalCastleBQ=true; break;
+                case 'k': UserInterface.UniversalCastleBK=true; break;
+            }
+            i++;
+        }
+        i++;
+
+        char c = fenString.charAt(i);
+        if(c >= 'a' && c <= 'h') UserInterface.EP = Moves.FileMasks8['a'-c];
+        else UserInterface.EP=0L;
     }
 
     private static void drawArray(long WP,long WR,long WN,long WB,long WQ,long WK,long BP,long BR,long BN,long BB,long BQ,long BK){
