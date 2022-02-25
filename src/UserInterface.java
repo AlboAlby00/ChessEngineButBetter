@@ -108,13 +108,19 @@ public class UserInterface extends JPanel implements MouseListener, MouseMotionL
     static public String getMove(int oldY, int oldX, int newY, int newX){
         //promotion white
         String move="";
-        int i = oldY*8+oldX;
-        if(((1L<<i)&WP&Moves.RankMasks8[1])!=0&&newY==0){
+        int oi = oldY*8+oldX;
+        int ni = newY*8+newX;
+        if(((1L<<oi)&WP&Moves.RankMasks8[1])!=0&&newY==0){
             move=""+(oldX)+(newX)+"QP";
         }
         //promotion black
-        else if(((1L<<i)&BP&Moves.RankMasks8[6])!=0&&newY==7){
+        else if(((1L<<oi)&BP&Moves.RankMasks8[6])!=0&&newY==7){
             move=""+(oldX)+(newX)+"qP";
+        }
+        //en passant
+        else if(((1L<<ni)&EP)!=0){
+            //Moves.drawBitboard(EP);
+            move=""+(oldX)+(newX)+" E";
         }
         //standard move
         else {
@@ -209,8 +215,8 @@ public class UserInterface extends JPanel implements MouseListener, MouseMotionL
     }
 
     public static void newGame(){
-        //BoardGeneration.initializeStandardChess();
-        BoardGeneration.importFen("rnbqkbnr/Pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - ");
+        BoardGeneration.initializeStandardChess();
+        //BoardGeneration.importFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - ");
 
     }
 
@@ -242,6 +248,7 @@ public class UserInterface extends JPanel implements MouseListener, MouseMotionL
         mousePressed=false;
 
         String move=getMove(yPress/squareSize,xPress/squareSize,yRel/squareSize,xRel/squareSize);
+        System.out.println(move);
         String possibleMovesW=Moves.possibleMovesW(WP,WR,WN,WB,WQ,WK,BP,BR,BN,BB,BQ,BK,UniversalCastleWQ,UniversalCastleWK,EP);
         String possibleMovesB=Moves.possibleMovesB(WP,WR,WN,WB,WQ,WK,BP,BR,BN,BB,BQ,BK,UniversalCastleBQ,UniversalCastleBK,EP);
         if(currentPlayer==1&&containsMove(possibleMovesW,move)||currentPlayer==0&&containsMove(possibleMovesB,move)){
